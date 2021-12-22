@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="../base.css">
+</head>
+<style>
+    .turtle {
+        width: 20rem;
+        position: relative;
+        --x: 0;
+        --y: 0;
+        --rotateX: 0;
+        --rotate: 0;
+        transform: translateX(var(--x)) translateY(var(--y)) rotatey(var(--rotateX)) rotate(var(--rotate));
+        transition: all 0.5s;
+    }
+    .butotns {
+        position: absolute;
+        bottom: 2rem;
+    }
+
+    button {
+        background: #c73737;
+        text-align: center;
+        padding: 2rem 8rem;
+        font-size: 25px;
+        cursor: pointer;
+        border-radius: 1rem;
+        margin: 0 20rem;
+    }
+
+    button[aria-selected='true'] {
+        background: yellowgreen;
+        color: white;
+        font-weight: bold;
+    }
+</style>
+<body>
+<img src="turtle.png" class="turtle">
+<div class="butotns">
+    <button aria-selected="true">X5</button>
+    <button aria-selected="false">X10</button>
+    <button aria-selected="false">X20</button>
+</div>
+</body>
+<script>
+    const turtle = document.querySelector('.turtle');
+    var x = 0;
+    var y = 0;
+    let speed = 5;
+    let flip = false;
+    let rotate = 0;
+
+    function handleKeyDown(e) {
+        if (!e.key.includes('Arrow')) {
+            return;
+        }
+        switch (e.key) {
+            case 'ArrowUp':
+                y = y - 1;
+                rotate = -90;
+                break;
+            case 'ArrowDown':
+                y = y + 1;
+                rotate = 90;
+                break;
+            case 'ArrowRight':
+                x = x + 1;
+                flip = false;
+                rotate = 0;
+                break;
+            case 'ArrowLeft':
+                x = x - 1;
+                flip = true;
+                rotate = 0;
+                break;
+        }
+        turtle.setAttribute('style',
+            `--x:${x * speed}px;
+            --y:${y * speed}px;
+          --rotateX: ${flip ? '180deg' : '0'};
+          --rotate: ${rotate}deg;
+  `)
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+        const buttons = document.querySelectorAll('button');
+
+    function handleButtonClick(e) {
+        buttons.forEach(speeds => {
+            speeds.setAttribute('aria-selected', false);
+
+        });
+        e.currentTarget.setAttribute('aria-selected', true);
+        switch (e.currentTarget.textContent) {
+            case 'X5':
+                speed = 5;
+                break;
+            case 'X10':
+                speed = 9;
+                break;
+            case 'X20':
+                speed = 12;
+        }
+        console.log(speed);
+    }
+
+    buttons.forEach(button => button.addEventListener('click', handleButtonClick));
+</script>
+</html>
